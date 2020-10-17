@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0034)http://kobore.net/QGIS_csv.mm.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<title>csvファイルでQGISに地図を表示する</title>
+<style type="text/css">
+    li { list-style: none;  margin: 0; }
+    p { margin: 0; }
+
+    span.l { color: red; font-weight: bold; }
+
+    a.mapnode:link {text-decoration: none; color: black; }
+    a.mapnode:visited {text-decoration: none; color: black; }
+    a.mapnode:active {text-decoration: none; color: black; }
+    a.mapnode:hover {text-decoration: none; color: black; background: #eeeee0; }
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+<span style="color: #000000;font-size: 166%;font-family: メイリオ, sans-serif; ">
+    <p style="text-align: center">
+      <b>csvファイルでQGISに地図を表示する</b>
+    </p>
+  </span>
+<ul><li><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">
+    <p style="text-align: right">
+      date
+    </p>
+  </span>
+<ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">
+    <p style="text-align: right">
+      2019/04/05
+    </p>
+  </span>
+
+</li>
+
+</ul><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">
+    <p style="text-align: right">
+      原本
+    </p>
+  </span>
+<ul><li><a href="http://kobore.net/QGIS_csv.mm.html" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">kobore.net &gt; QGIS csv.mm</span>
+</a>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">1.動機</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■QGISで表示される仮想の地図(osmファイル)を作ってみたが、これがどうにも上手く動いてくれない</span>
+<ul><li><a href="http://kobore.net/v2_ebata99.cpp" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">kobore.net &gt; V2 ebata99</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■JOSMにインポートしてエクスポートしたりもした。形式的には問題がないように見える</span>
+<ul><li><a href="http://kobore.net/v_ebata99.osm" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">kobore.net &gt; V ebata99</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■しかし、何をどうしてもpostGISに読み込んでくれないし、QGISもosmファイルをダイレクトに読み込んでもくれない</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■正直本気で困った</span>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">2.発想の転換</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■この際、ノード(道路)は諦めて、ポイントだけでも表示できればいい、と割りきった(こんなところで時間を使うのは、なんとも悔しい)</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■CSVファイルで読み込めないかな、と思ったら、QGISには、その仕組みがあった</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">■忘れないうちにメモしておこう、と思った</span>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">3.やり方</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">(Step.1)CSVファイルを作る</span>
+<ul><li><a href="http://kobore.net/v2_ebata99_csv.cpp" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">kobore.net &gt; V2 ebata99 csv</span>
+</a>
+
+</li>
+<li><a href="http://kobore.net/v2_ebata99.cpp" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">kobore.net &gt; V2 ebata99</span>
+</a>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">(Step.2) QGIS3を起動</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">(Step.3) "レイヤ"→"レイヤの追加"→"デリミテッドテキストレイヤの追加"</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">(Step.4)</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; "><img src="./QGIS_csv.mm_files/QGIS_csv_4668701616795624571.jpeg"></span>
+
+</li>
+
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">(Step.5)</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">プロジェクトとして保存しておけば、後からも使える</span>
+<ul><li><span style="color: #111111;"><img src="./QGIS_csv.mm_files/QGIS_csv_669823123783010608.jpeg"></span>
+
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+</ul><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">
+    <p style="text-align: right">
+      以上
+    </p>
+  </span>
+</li>
+</ul>
+
+</body></html>
