@@ -1,0 +1,33 @@
+#coding: UTF-8
+
+import socket
+from time import sleep
+
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# client.bind(("127.0.0.1",2000))
+
+# client.sendto(b"12345",("127.0.0.1",2000))
+
+for i in range (10):
+    sleep(1)
+
+    lat_train1 = 35.898216 - 0.005 * i
+    lon_train1 = 139.910479 + 0.005 * i
+
+    # client.sendto(b"train1,35.898216,139.910479\n",("127.0.0.1",2000))
+
+    chr_train1 = "train1,"+ str(lat_train1) + "," + str(lon_train1) + "\n"
+    print chr_train1
+    client.sendto(chr_train1,("127.0.0.1",2000))
+
+    sleep(1)
+
+    lat_person1 = 35.848216 + 0.005 * i
+    lon_person1 = 139.910479 + 0.005 * i
+
+    # client.sendto(b"train1,35.898216,139.910479\n",("127.0.0.1",2000))
+
+    chr_person1 = "person1,"+ str(lat_person1) + "," + str(lon_person1) + "\n"
+    print chr_person1
+    client.sendto(chr_person1,("127.0.0.1",2000))
+    
