@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0034)http://kobore.net/PosiView.mm.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<title>QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )</title>
+<style type="text/css">
+    li { list-style: none;  margin: 0; }
+    p { margin: 0; }
+
+    span.l { color: red; font-weight: bold; }
+
+    a.mapnode:link {text-decoration: none; color: black; }
+    a.mapnode:visited {text-decoration: none; color: black; }
+    a.mapnode:active {text-decoration: none; color: black; }
+    a.mapnode:hover {text-decoration: none; color: black; background: #eeeee0; }
+
+</style>
+<!-- ^ Position is not set to relative / absolute here because of Mozilla -->
+</head>
+<body>
+<span style="color: #000000;font-size: 166%;font-family: メイリオ, sans-serif; ">
+    <p style="text-align: center">
+      QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする<br>(display real-time mobile objects using QGIS plug-in (PosiView) )
+    </p>
+  </span>
+<ul><li><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Date</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">2019/02/06</span>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">Data</span>
+</p><ul><li><a href="http://kobore.net/PosiView.mm.html" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">kobore.net &gt; PosiView.mm</span>
+</a>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: メイリオ, sans-serif; ">1.背景(Background)</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: メイリオ, sans-serif; ">
+    <p>
+      ■最近QGISを頻繁に使うようになった<br>(Recently I have used QGIS frequently)
+    </p>
+  </span>
+<p><span style="color: #00b439;font-size: 133%;font-family: メイリオ, sans-serif; ">■「QGISで交通シミュレーションのビューアが作れたら、楽できるんだけどなー」とか考えるようになってきた
+<br>
+(I came to think that "if I can make a traffic simulation viewer with QGIS, it is easy")</span>
+</p><p><span style="color: #00b439;font-size: 133%;font-family: メイリオ, sans-serif; ">■QGISのプラグインを探していたら、"PosiView"が使えそうなことが判ってきた
+<br>
+(When I was looking for a plugin for QGIS, I found out that "PosiView" might be useful)</span>
+</p></li>
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: メイリオ, sans-serif; ">2. What's "PosiView"</span>
+</p><ul><li><p><span style="color: #00b439;font-size: 133%;font-family: メイリオ, sans-serif; ">■複数のオブジェクトや車両を追跡し、それらをキャンバス上の形状や点として表示することができるQGISのプラグイン
+<br>
+(PosiView tracks multiple mobile objects and vehicles and displays their position on the canvas)</span>
+</p><ul><li><p><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">■GPS、USBLシステムまたは他のセンサーのような装置から通常NMEA-0183フォーマット等で提供される位置データを受けつける
+<br>
+(The Plugin reads usually NMEA formatted data from USBL or other navigation devices and displays the object as scaled symbol on the canvas.)</span>
+</p><p><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">■これらのデバイスへの接続は、TCP/UDPによって行うことができる
+<br>
+(Connection to those devices is established by data provider connecting to network sockets (UDP/TCP))</span>
+</p></li>
+</ul><p><a href="https://plugins.qgis.org/plugins/PosiView/" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">https://plugins.qgis.org/plugins/PosiView/</span>
+</a>
+</p><p><a href="https://github.com/jrenken/qgis-PosiView/blob/master/help/source/index.rst" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">https://github.com/jrenken/qgis-PosiView/blob/master/help/source/index.rst</span>
+</a>
+</p></li>
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: メイリオ, sans-serif; ">3. 問題点(Problem)</span>
+</p><ul><li><p><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; font-weight: bold; ">■私は、シミュレータから出力される位置情報をリアルタイムで表示したかった
+<br>
+(I wanted to just display the position information of realtime simulator)</span>
+</p><ul><li><p><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">■ところが、PosiViewには、このような低機能なパーサーが実装されていなかった
+<br>
+(However, PosiView did not have such a low function parser)</span>
+</p></li>
+</ul></li>
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: メイリオ, sans-serif; ">4.対応</span>
+</p><ul><li><p><span style="color: #00b439;font-size: 133%;font-family: メイリオ, sans-serif; ">■"PosiView"の作者である、イェンス・レンケンさん(Mr.Jens Renken)にメールでご相談してみた
+<br>
+(I asked Mr. Jens Renken, author of "PosiView", for help with e-mail)</span>
+</p><ul><li><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">■新しいパーサーを追加して頂いた(Mr. Jens Renken was kind enough to make a new parser and add it)</span>
+
+</li>
+
+</ul></li>
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">5.設定例(Setting example)</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">以下、実際に動かした例をそのまま表記する
+<br>
+(The following is a example actually moved )</span>
+
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">A.準備編(Preparation)</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">
+    <p>
+      (Step 1) postGISに"k11.osm"をインポートしておく<br>(Import "k11.osm" into postGIS)
+    </p>
+  </span>
+<ul><li><span style="color: #111111;font-family: メイリオ, sans-serif; ">
+    <p>
+      柏市周辺<br>(Around Kashiwa city)
+    </p>
+  </span>
+<ul><li><a href="http://kobore.net/k11.zip" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #111111;">kobore.net &gt; K11</span>
+</a>
+
+</li>
+
+</ul><span style="color: #111111;font-family: メイリオ, sans-serif; ">
+    <p>
+      インポート方法はこちら<br>(How to import)
+    </p>
+  </span>
+<ul><li><a href="http://kobore.net/postGIS.mm.html" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #111111;">kobore.net &gt; PostGIS.mm</span>
+</a>
+
+</li>
+
+</ul></li>
+</ul><span style="color: #990000;font-size: 116%;font-family: メイリオ, sans-serif; ">
+    <p>
+      (Step 2)プラグインPosiViewをインストールする<br>(Install plug-in PosiView)
+    </p>
+  </span>
+<ul><li><p><span style="color: #111111;font-family: メイリオ, sans-serif; ">QGIS→プラグイン→プラグインの管理とインストール→全て→検索欄に"posiview"と入力→posiviewを選択→プラグインをインストール
+<br>
+(QGIS →&nbsp;Plugins →&nbsp;Manage and install plugins →&nbsp;All →&nbsp;Enter "posiview" in the search field →&nbsp;select posiview →&nbsp;Install plugin)</span>
+</p></li>
+</ul><p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">(Step 3)</span>
+</p><ul><li><p><a href="https://cloud.marum.de/s/tp2D2s5poPE3doS" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #111111;font-family: SansSerif, sans-serif; ">https://cloud.marum.de/s/tp2D2s5poPE3doS</span>
+</a>
+</p><p><span style="color: #111111;font-family: SansSerif, sans-serif; ">■から、"PosiView_custom_parser_2.zip"をダウンロードして解凍
+<br>
+(Download "PosiView_custom_parser_2.zip")</span>
+<span style="color: #111111;font-family: SansSerif, sans-serif; ">
+    </span></p><p>
+      ■解凍したものを<br>(unziped files)
+    </p>
+  
+<ul><li><span style="color: #111111;">
+    <p>
+      ■QGIS2の場合は<br>(In case QGIS2)
+    </p>
+  </span>
+<ul><li><span style="color: #111111;">C:\Users\(username)\.qgis2\python\plugins\PosiView\dataprovider\dataparser</span>
+
+</li>
+
+</ul><span style="color: #111111;">
+    <p>
+      ■QGIS3の場合は<br>(In case QGIS3)
+    </p>
+  </span>
+<ul><li><p><span style="color: #111111;">C:\Users\(username)\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\PosiView\dataprovider\dataparser</span>
+</p></li>
+</ul></li>
+</ul><span style="color: #111111;font-family: SansSerif, sans-serif; ">
+    <p>
+      ■にある、
+    </p>
+  </span>
+<ul><li><span style="color: #111111;font-family: SansSerif, sans-serif; font-weight: bold; ">
+    <p>
+      ■"__init__.py" を上書きして<br>(Overwrite "__init__.py")
+    </p>
+  </span>
+<span style="color: #111111;font-family: SansSerif, sans-serif; font-weight: bold; ">
+    <p>
+      ■"parser_test.py" を追加する<br>(Add "parser_test.py")
+    </p>
+  </span>
+</li>
+</ul></li>
+</ul><p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">(Step 4)</span>
+</p><ul><li><span style="color: #111111;font-family: SansSerif, sans-serif; ">
+    <p>
+      ■QGISを再起動する(Restart QGIS)
+    </p>
+  </span>
+</li>
+</ul><p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">(Step 5)データ送信用のテストプログラムをダウンロードする
+<br>
+(Download test program for data transmission)</span>
+</p><ul><li><a href="http://kobore.net/udp-client-loop.py" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #111111;">kobore.net &gt; Udp-client-loop</span>
+</a>
+
+</li>
+
+</ul></li>
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">B.設定編(Setting)</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">
+    <img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_1063940184356979124.jpeg">
+  </span>
+<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">
+    <p>
+      ■を選んで、"Enable posiview"を選択<br>(Choose "Enable Posivew")
+    </p>
+  </span>
+<p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">■再度、プラグイン→"PosiView"→"Configure PosiView"を選択
+<br>
+(Again, select plugin →&nbsp;"PosiView" →&nbsp;"Configure PosiView")</span>
+<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">
+    <img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_626455456528555166.jpeg">
+  </span>
+<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">
+    <img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_2956999333423844070.jpeg">
+  </span>
+<span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">
+    <img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_1593117103613431576.jpeg">
+  </span>
+</p></li>
+</ul>
+</li>
+<li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">C.実行編(Execution)</span>
+<ul><li><p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">■プラグイン→"PosiView"→"start/stop tracking"を選択
+<br>
+(Plug-in →&nbsp;"PosiView" →&nbsp;select "start / stop tracking")</span>
+</p><p><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; ">■コマンドプロンプトから "&gt;python2 udp-client-loop.py" を投入
+<br>
+ (From the command prompt, enter "&gt; python 2 udp - client - loop.py")</span>
+</p></li>
+</ul>
+</li>
+
+</ul><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">
+    <p>
+      6. 実行結果(動画)<br>(Execution result (movie))
+    </p>
+  </span>
+<ul><li><a href="http://kobore.net/Test_of_PosiView_test2.mp4" target="_blank"><span class="l">~</span>&nbsp;<span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">kobore.net &gt; Test of PosiView test2</span>
+</a>
+
+</li>
+
+</ul><p><span style="color: #0033ff;font-size: 150%;font-family: SansSerif, sans-serif; ">7.その他(Others)</span>
+</p><ul><li><span style="color: #00b439;font-size: 133%;font-family: SansSerif, sans-serif; ">設定を手動でやりたい場合(Setting by editor)</span>
+<ul><li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; "><img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_4853475771528402904.jpeg"></span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; "><img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_42015830171232104.jpeg"></span>
+
+</li>
+<li><span style="color: #990000;font-size: 116%;font-family: SansSerif, sans-serif; "><img src="./QGISのプラグイン(PosiView)を使って、移動体のリアルタイム表示をする (display real-time mobile objects using QGIS plug-in (PosiView) )_files/PosiView_709676571020121667.jpeg"></span>
+
+</li>
+
+</ul>
+</li>
+
+</ul></li>
+</ul>
+
+</body></html>
